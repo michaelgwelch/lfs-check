@@ -11,7 +11,7 @@ const EmptyTreeSha = '4b825dc642cb6eb9a060e54bf8d69288fbee4904';
 
 async function normalizeCommitish(id) {
   try {
-    const { stdout } = await exec(`git rev-parse ${id}`);
+    const { stdout } = await exec(`git rev-parse --short ${id}`);
     return stdout.trim();
   } catch (e) {
     throw new Error(`'${id}' is not a valid commit id`);
@@ -149,9 +149,12 @@ async function isBinary(sha, file) {
 }
 
 /**
- * Checks the changes files in the specified commit and returns an array of
- * files that are binary in the format 'commit:path'
- * @param {Commit|string} [commit = 'HEAD'] commit
+ * Checks the changed files in the specified commit and returns an array of
+ * binary files that are checked into the repository. The files are identified in the 
+ * format 'commit:path'.
+ * @param {Commit|string} [commit = 'HEAD'] commit - A commit identifier
+ * @returns {Array.<string>} A list of binary files. Each file is identified by commit
+ * and path in the format commit:path (eg. d7abc6:bin/image.png)
  */
 async function checkCommit(commit = 'HEAD') {
   const actualCommit = (_.isString(commit)) ? await getCommit(commit) : commit;
@@ -201,7 +204,7 @@ if (userArgs.length === 0) {
 async function checker(commit) {
   try {
     const normalizedCommit = await normalizeCommitish(commit);
-    console.log(`Checking commit ${normalizedCommit.slice(0, 6)}`);
+    console.log(`Checking commit ${normalizedCommit}`);
     const binaries = await checkCommit(commit);
     if (binaries.length > 0) {
       console.log('Binary files found:');
