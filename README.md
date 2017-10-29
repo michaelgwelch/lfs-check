@@ -1,4 +1,5 @@
 # lfs-check
+
 Make sure your binary files are tracked using lfs and not entered directly into your repo
 
 ## Command line usage
@@ -30,21 +31,23 @@ Binary files found:
 
 This package is useful as a command line tool for double checking  your work before pushing it. However, it is primarily intended to be used as part of a build process to check for any binaries in a pull request.
 
-There is only one function that will be exposed `checkCommit`:
+There is one main function that is exposed `checkCommit`:
 
 ```js
 /**
  * Checks the changed files in the specified commit and returns an array of
- * binary files that are checked into the repository. The files are identified in the 
+ * binary files that are checked into the repository from that commit. The files are identified in the
  * format 'commit:path'.
  * @param {Commit|string} [commit = 'HEAD'] commit - A commit identifier
- * @returns {Array.<string>} A list of binary files. Each file is identified by commit
- * and path in the format commit:path (eg. d7abc6:bin/image.png)
+ * @returns {Promise.<Array.<string>>} A promise that resolves to a list of file paths. These paths
+ * represent the binary files included in this commit.
+ * The path is in the format commit:path (eg. d7abc6:bin/image.png). This commit prefix is used
+ * to make it explicit that the results for that file pertain to that commit.
  */
 async function checkCommit(commit = 'HEAD')
 ```
 
-At the time of writing, it is not yet exposed. It will work someting like this
+It can be used like in the following simple example that checks HEAD.
 
 ```js
 const lfs = require('lfs-check');
