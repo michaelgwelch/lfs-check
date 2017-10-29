@@ -1,6 +1,8 @@
 # lfs-check
 
-Make sure your binary files are tracked using lfs and not entered directly into your repo
+Make sure your binary files are tracked using `git lfs` and not entered directly into your repo.
+
+Run this as a command line utility to identify any binary files that were added to your repository, or use it as a library to incorporate it into your own scripts.
 
 ## Command line usage
 
@@ -10,14 +12,14 @@ Install
 npm install -g lfs-check
 ```
 
-In this commit everything is ok:
+In this commit everything is ok. No files are listed, this means no binary files were added in this commit.
 
 ```sh
 $ lfs-check HEAD
 Checking commit 1d6f38
 ```
 
-In the following commit I accidentally committed binaries to my repo.
+In the following commit I accidentally committed binaries to my repo. I may want to consider tracking them using `git-lfs` and then rebase (or otherwise rewrite history) to avoid having a binary permanently added to a published repo.
 
 ```sh
 $ lfs-check play-with-binaries^^
@@ -29,7 +31,7 @@ Binary files found:
 
 ## Library Usage
 
-This package is useful as a command line tool for double checking  your work before pushing it. However, it is primarily intended to be used as part of a build process to check for any binaries in a pull request.
+This package is useful as a command line tool for double checking your work before pushing it. However, it is primarily intended to be used as part of a build process to check for any binaries in a pull request.
 
 There is one main function that is exposed `checkCommit`:
 
@@ -53,6 +55,7 @@ It can be used like in the following simple example that checks HEAD.
 const lfs = require('lfs-check');
 
 async function checkHead() {
-  const errors = await lfs-checkCommit('HEAD');
-  console.log(error);
+  const errors = await lfs.checkCommit('HEAD');
+  console.log(errors);
 }
+```
