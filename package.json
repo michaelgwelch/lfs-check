@@ -1,11 +1,11 @@
 {
   "name": "lfs-check",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Make sure your binary files are tracked with git-lfs not checked into your repo.",
-  "main": "index.js",
+  "main": "./index.js",
   "preferGlobal": true,
   "bin": {
-    "lfs-check": "index.js"
+    "lfs-check": "./cli.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
