@@ -199,15 +199,19 @@ if (userArgs.length === 0) {
 }
 
 async function checker(commit) {
-  const normalizedCommit = await normalizeCommitish(commit);
-  console.log(`Checking commit ${normalizedCommit.slice(0, 6)}`);
-  const binaries = await checkCommit(commit);
-  if (binaries.length > 0) {
-    console.log('Binary files found:');
-    binaries.forEach((binary) => {
-      const file = binary.split(':')[1];
-      console.log(`  ${file}`);
-    });
+  try {
+    const normalizedCommit = await normalizeCommitish(commit);
+    console.log(`Checking commit ${normalizedCommit.slice(0, 6)}`);
+    const binaries = await checkCommit(commit);
+    if (binaries.length > 0) {
+      console.log('Binary files found:');
+      binaries.forEach((binary) => {
+        const file = binary.split(':')[1];
+        console.log(`  ${file}`);
+      });
+    }
+  } catch (e) {
+    console.log(e.message);
   }
 }
 
