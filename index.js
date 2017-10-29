@@ -149,9 +149,12 @@ async function isBinary(sha, file) {
 }
 
 /**
- * Checks the changes files in the specified commit and returns an array of
- * files that are binary in the format 'commit:path'
- * @param {Commit|string} [commit = 'HEAD'] commit
+ * Checks the changed files in the specified commit and returns an array of
+ * binary files that are checked into the repository. The files are identified in the 
+ * format 'commit:path'.
+ * @param {Commit|string} [commit = 'HEAD'] commit - A commit identifier
+ * @returns {Array.<string>} A list of binary files. Each file is identified by commit
+ * and path in the format commit:path (eg. d7abc6:bin/image.png)
  */
 async function checkCommit(commit = 'HEAD') {
   const actualCommit = (_.isString(commit)) ? await getCommit(commit) : commit;
@@ -162,7 +165,7 @@ async function checkCommit(commit = 'HEAD') {
   return _
     .chain(_.zip(files, results))
     .filter(pair => pair[1])
-    .map(pair => `${actualCommit.id}:${pair[0]}`)
+    .map(pair => `${actualCommit.id.slice(0, 7)}:${pair[0]}`)
     .value();
 }
 
