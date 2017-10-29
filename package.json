@@ -1,0 +1,26 @@
+{
+  "name": "lfs-check",
+  "version": "1.0.0",
+  "description": "Make sure your binary files are tracked with git-lfs not checked into your repo.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/michaelgwelch/lfs-check.git"
+  },
+  "keywords": [
+    "git",
+    "lfs",
+    "binary",
+    "check",
+    "commit"
+  ],
+  "author": "Michael Welch",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/michaelgwelch/lfs-check/issues"
+  },
+  "homepage": "https://github.com/michaelgwelch/lfs-check#readme"
+}
