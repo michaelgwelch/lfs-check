@@ -11,7 +11,7 @@ const EmptyTreeSha = '4b825dc642cb6eb9a060e54bf8d69288fbee4904';
 
 async function normalizeCommitish(id) {
   try {
-    const { stdout } = await exec(`git rev-parse ${id}`);
+    const { stdout } = await exec(`git rev-parse --short ${id}`);
     return stdout.trim();
   } catch (e) {
     throw new Error(`'${id}' is not a valid commit id`);
@@ -165,7 +165,7 @@ async function checkCommit(commit = 'HEAD') {
   return _
     .chain(_.zip(files, results))
     .filter(pair => pair[1])
-    .map(pair => `${actualCommit.id.slice(0, 7)}:${pair[0]}`)
+    .map(pair => `${actualCommit.id}:${pair[0]}`)
     .value();
 }
 
@@ -204,7 +204,7 @@ if (userArgs.length === 0) {
 async function checker(commit) {
   try {
     const normalizedCommit = await normalizeCommitish(commit);
-    console.log(`Checking commit ${normalizedCommit.slice(0, 6)}`);
+    console.log(`Checking commit ${normalizedCommit}`);
     const binaries = await checkCommit(commit);
     if (binaries.length > 0) {
       console.log('Binary files found:');
