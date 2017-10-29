@@ -1,8 +1,12 @@
 {
   "name": "lfs-check",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Make sure your binary files are tracked with git-lfs not checked into your repo.",
   "main": "index.js",
+  "preferGlobal": true,
+  "bin": {
+    "lfs-check": "index.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -22,5 +26,13 @@
   "bugs": {
     "url": "https://github.com/michaelgwelch/lfs-check/issues"
   },
-  "homepage": "https://github.com/michaelgwelch/lfs-check#readme"
+  "homepage": "https://github.com/michaelgwelch/lfs-check#readme",
+  "devDependencies": {
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0"
+  },
+  "dependencies": {
+    "eslint": "^4.10.0",
+    "lodash": "^4.17.4"
+  }
 }
