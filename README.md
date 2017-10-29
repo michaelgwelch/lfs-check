@@ -28,7 +28,7 @@ Binary files found:
 
 ## Library Usage
 
-This package, while useful as a command line tool for double checking before your work before pushing your work, is intended to be used as part of a build process to check for any binaries in a pull request.
+This package is useful as a command line tool for double checking  your work before pushing it. However, it is primarily intended to be used as part of a build process to check for any binaries in a pull request.
 
 There is only one function that will be exposed `checkCommit`:
 
