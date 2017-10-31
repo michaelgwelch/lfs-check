@@ -4,6 +4,14 @@ const _ = require('lodash');
 
 const exec = util.promisify(cp.exec);
 
+// My new version will be based on this
+//  git log --numstat --no-renames  | awk '/^((-\t-\t)|(commit))/{print $0}'
+// But this shows renames as one delete line and one add line.
+// So I may want to run with renames first
+// git log --numstat  | awk '/^((-\t-\t)|(commit))/{print $0}'
+// and then check just those commits with renames.
+// else find the tool to convert path with rename syntax to final name
+
 const EmptyTreeSha = '4b825dc642cb6eb9a060e54bf8d69288fbee4904';
 
 
@@ -148,7 +156,7 @@ async function isBinary(sha, file) {
 
 /**
  * Checks the changed files in the specified commit and returns an array of
- * binary files that are checked into the repository. The files are identified in the 
+ * binary files that are checked into the repository. The files are identified in the
  * format 'commit:path'.
  * @param {Commit|string} [commit = 'HEAD'] commit - A commit identifier
  * @returns {Array.<string>} A list of binary files. Each file is identified by commit
@@ -165,6 +173,27 @@ async function checkCommit(commit = 'HEAD') {
     .filter(pair => pair[1])
     .map(pair => `${actualCommit.id}:${pair[0]}`)
     .value();
+}
+
+async function getCommitsAheadOfMaster(commit) {
+  try {
+    const { stdout } = await exec(`git log --format=oneline master..${commit}`);
+    return stdout.trim(0)
+      .split('\n')
+      .filter(line => line.length !== 0)
+      .map(commitLine => commitLine.split(/\s+/)[0]);
+  } catch (e) {
+    console.log(`Unknown commit or branch identifer '${commit}`);
+    return [];
+  }
+}
+
+async function getCurrentBranch() {
+  const { stdout } = await exec('git branch --no-color');
+  const branches = stdout.trim().split('\n');
+
+  // current branch is the only line that begins with *
+  return branches.find(branch => branch.startsWith('*')).split(/\s+/)[1];
 }
 
 // /**
@@ -191,5 +220,7 @@ async function checkCommit(commit = 'HEAD') {
 //   } while (tovisit.length > 0);
 // }
 
-module.exports = { checkCommit, normalizeCommitish };
+module.exports = {
+  checkCommit, normalizeCommitish, getCommitsAheadOfMaster, getCurrentBranch,
+};
 

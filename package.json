@@ -1,11 +1,12 @@
 {
   "name": "lfs-check",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Make sure your binary files are tracked with git-lfs not checked into your repo.",
   "main": "./index.js",
   "preferGlobal": true,
   "bin": {
-    "lfs-check": "./cli.js"
+    "lfs-check": "./cli.js",
+    "git-lfs-check": "./cli.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -32,6 +33,7 @@
     "eslint-plugin-import": "^2.8.0"
   },
   "dependencies": {
+    "colors": "^1.1.2",
     "eslint": "^4.10.0",
     "lodash": "^4.17.4"
   }
