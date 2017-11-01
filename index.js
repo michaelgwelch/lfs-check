@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const cp = require('child_process');
 const util = require('util');
 const _ = require('lodash');
@@ -181,7 +182,12 @@ async function getCommitsAheadOfMaster(commit) {
     return stdout.trim(0)
       .split('\n')
       .filter(line => line.length !== 0)
-      .map(commitLine => commitLine.split(/\s+/)[0]);
+      .map((commitLine) => {
+        const spaceIndex = commitLine.indexOf(' ');
+        const id = commitLine.slice(0, spaceIndex);
+        const message = commitLine.slice(spaceIndex).trim();
+        return { id, message };
+      });
   } catch (e) {
     console.log(`Unknown commit or branch identifer '${commit}`);
     return [];
