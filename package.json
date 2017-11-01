@@ -28,11 +28,11 @@
   },
   "homepage": "https://github.com/michaelgwelch/lfs-check#readme",
   "devDependencies": {
+    "eslint": "^4.10.0",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.8.0"
   },
   "dependencies": {
-    "eslint": "^4.10.0",
     "lodash": "^4.17.4"
   }
 }
