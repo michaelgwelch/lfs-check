@@ -148,7 +148,7 @@ async function isBinary(sha, file) {
 
 /**
  * Checks the changed files in the specified commit and returns an array of
- * binary files that are checked into the repository. The files are identified in the 
+ * binary files that are checked into the repository. The files are identified in the
  * format 'commit:path'.
  * @param {Commit|string} [commit = 'HEAD'] commit - A commit identifier
  * @returns {Array.<string>} A list of binary files. Each file is identified by commit
