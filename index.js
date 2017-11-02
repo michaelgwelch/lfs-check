@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 const cp = require('child_process');
 const util = require('util');
+const { parseGitBranch } = require('./lib/git-parsing.js');
 
 const exec = util.promisify(cp.exec);
 
@@ -62,35 +63,8 @@ async function gitLogNumStat(branch) {
 
 async function getCurrentBranch() {
   const { stdout } = await exec('git branch --no-color');
-  const branches = stdout.trim().split('\n');
-
-  // current branch is the only line that begins with *
-  return branches.find(branch => branch.startsWith('*')).split(/\s+/)[1];
+  return parseGitBranch(stdout);
 }
-
-// /**
-//  * Checks all the files o
-//  * @param {*} branch
-//  */
-// async function checkBranch(branch) {
-//   let tovisit = [branch];
-//   const visited = [];
-
-
-//   do {
-//     const sha = tovisit.pop();
-//     if (visited.indexOf(sha) >= 0) {
-//       continue;
-//     }
-//     const commit = await getCommit(sha);
-//     const errors = await checkCommit(commit);
-//     if (errors.length > 0) {
-//       console.log(errors);
-//     }
-//     visited.push(sha);
-//     tovisit = tovisit.concat(commit.parents);
-//   } while (tovisit.length > 0);
-// }
 
 module.exports = {
   gitLogNumStat, getCurrentBranch,
