@@ -1,6 +1,7 @@
 # lfs-check
 
-[![Build Status](https://travis-ci.org/michaelgwelch/lfs-check.svg?branch=master)](https://travis-ci.org/michaelgwelch/lfs-check)
+[![Build Status](https://travis-ci.org/michaelgwelch/lfs-check.svg?branch=master)](https://travis-ci.org/michaelgwelch/lfs-check) [![Build status](https://ci.appveyor.com/api/projects/status/6jflu15a7867prso?svg=true)](https://ci.appveyor.com/project/michaelgwelch/lfs-check)
+
 
 Make sure your binary files are tracked using `git lfs` and not entered directly into your repo.
 
