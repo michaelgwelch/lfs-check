@@ -1,5 +1,8 @@
 # lfs-check
 
+[![Build Status](https://travis-ci.org/michaelgwelch/lfs-check.svg?branch=master)](https://travis-ci.org/michaelgwelch/lfs-check) [![Build status](https://ci.appveyor.com/api/projects/status/6jflu15a7867prso?svg=true)](https://ci.appveyor.com/project/michaelgwelch/lfs-check)
+
+
 Make sure your binary files are tracked using `git lfs` and not entered directly into your repo.
 
 Run this as a command line utility to identify any binary files that were added to your current branch, or use it as a library to incorporate it into your own scripts.
