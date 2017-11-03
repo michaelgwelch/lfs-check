@@ -11,9 +11,12 @@ function processCommitChunk(commitChunk) {
 
   if (lines.length > 1) {
   // first line has the word commmit followed by the hash
-    const [, hash, ...words] = lines[0].split(/\s+/);
+    const splitIndex = lines[0].indexOf(' ');
+    const hash = lines[0].substring(0, splitIndex);
+    const words = lines[0].substring(splitIndex).trim();
+
     commitObject.id = hash;
-    commitObject.message = words.join();
+    commitObject.message = words;
 
     const binaries = lines
       .slice(1)
