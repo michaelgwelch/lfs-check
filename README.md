@@ -2,29 +2,37 @@
 
 [![Build Status](https://travis-ci.org/michaelgwelch/lfs-check.svg?branch=master)](https://travis-ci.org/michaelgwelch/lfs-check) [![Build status](https://ci.appveyor.com/api/projects/status/6jflu15a7867prso?svg=true)](https://ci.appveyor.com/project/michaelgwelch/lfs-check)
 
+Make sure your binary files are not accidentally added to your repository.
 
-Make sure your binary files are tracked using `git lfs` and not entered directly into your repo.
+Run this command line utility to identify any binary files that were added to your current branch. It will examine every new
+commit in the current branch until it reaches `master`. (It assumes everything in master is clean or else it's too late to do anything
+about it.)
 
-Run this as a command line utility to identify any binary files that were added to your current branch, or use it as a library to incorporate it into your own scripts.
-
-## Command line usage
-
-Install
+## Install
 
 ```sh
 npm install -g lfs-check
 ```
 
-Here is the usage:
+## Command line usage
 
 ```sh
 usage : lfs-check [branch]
         git lfs-check [branch]
 ```
 
-The application identifies those commits that are ahead of master and checks them for binary files.
-If no branch is specified, the current branch is used. If the command is run in the master branch nothing
-happens.
+Identifies binary files and associated commits that have been added since `master`. If no branch name
+is specified then the current branch is used. The command examines every commit ahead of master reporting
+on any binaries that were found.
+
+**Note:** This command does nothing if you run it from the master branch without specifying another branch.
+This is because there is no diff produced when comparing master against master. If you run this command
+from master be sure to specify which branch you are examining.
+
+To help drive understanding of this behavior, the motivation for this program was to look for binary
+files in a pull request. In that scenario there is no need to examine master. Even if it contains
+binaries, in most cases it's too late to do anything about it unless your repo is new and you don't
+mind rewriting history.
 
 In the following example, the branch
 `my-feature-branch` is 2 commits ahead of master. So those two commits are checked.
@@ -32,17 +40,17 @@ In the following example, the branch
 ```sh
 $ git checkout my-feature-branch
 $ lfs-check
-Checking commit 436e789
-Checking commit 53bb1bb
+436e789 update readme
+53bb1bb add feature
 ```
 
-In the following example we specify an actual commit to check, the commit is ok. No files are listed, this means no binary files were added in this commit.
-
-In the following commit I accidentally committed binaries to my repo. I may want to consider tracking them using `git-lfs` and then rebase (or otherwise rewrite history) to avoid having a binary permanently added to a published repo.
+In the following example I added binaries to my feature branch. Even though you can tell from my commit
+history that I later removed them, `lfs-check` still finds them in the earlier commit and warns me.
 
 ```sh
-$ lfs-check play-with-binaries^^
-Checking commit d63b9f
+$ lfs-check play-with-binaries
+abcdef remove binary files from repo
+d63b9f add binary files to repo
 Binary files found:
   bin/Schedule.xlsx
   bin/integration.png
@@ -73,15 +81,6 @@ _git_lfs_check ()
 	--set-upstream-to=*)
 		__git_complete_refs --cur="${cur##--set-upstream-to=}"
 		;;
-	# --*)
-	# 	__gitcomp "
-	# 		--color --no-color --verbose --abbrev= --no-abbrev
-	# 		--track --no-track --contains --no-contains --merged --no-merged
-	# 		--set-upstream-to= --edit-description --list
-	# 		--unset-upstream --delete --move --remotes
-	# 		--column --no-column --sort= --points-at
-	# 		"
-	# 	;;
 	*)
 		if [ $only_local_ref = "y" -a $has_r = "n" ]; then
 			__gitcomp_direct "$(__git_heads "" "$cur" " ")"
@@ -99,38 +98,22 @@ With this in place you can type
 git lfs-check branch-name
 ```
 
-So can type \<TAB\> after `lfs-` to auto-complete and also the first few characters of branch name to auto complete.
+Now you can type \<TAB\> after `lfs-` to auto-complete. This also works to auto-complete branch and tag names like
+other git commands.
 
+**Note:** I have no idea how to write bash completions. The one above is based on `__git_branch ()` completions. I
+copied that function and removed a section I know I didnt need dealing with branch switches.
+It seems to work for my needs (completing branch names).
 
 <!-- markdownlint-enable no-hard-tabs -->
 
-## Library Usage
+## Manually inspecting your entire branch
 
-This package is useful as a command line tool for double checking your work before pushing it. However, it is primarily intended to be used as part of a build process to check for any binaries in a pull request.
+If you wish to check the entire history in a branch you can use the following command upon which
+this utility is based on.
 
-There is one main function that is exposed `checkCommit`:
-
-```js
-/**
- * Checks the changed files in the specified commit and returns an array of
- * binary files that are checked into the repository from that commit. The files are identified in the
- * format 'commit:path'.
- * @param {Commit|string} [commit = 'HEAD'] commit - A commit identifier
- * @returns {Promise.<Array.<string>>} A promise that resolves to a list of file paths. These paths
- * represent the binary files included in this commit.
- * The path is in the format commit:path (eg. d7abc6:bin/image.png). This commit prefix is used
- * to make it explicit that the results for that file pertain to that commit.
- */
-async function checkCommit(commit = 'HEAD')
+```sh
+git log --numstat | awk '/^-/{print $NF}' | sort -u
 ```
 
-It can be used like in the following simple example that checks HEAD.
-
-```js
-const lfs = require('lfs-check');
-
-async function checkHead() {
-  const errors = await lfs.checkCommit('HEAD');
-  console.log(errors);
-}
-```
+You can read more about `git log` and/or read the answers at this [Stack Overflow Question](https://stackoverflow.com/questions/27931520/git-find-all-binary-files-in-history)
