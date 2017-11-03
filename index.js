@@ -6,26 +6,7 @@ const {
 require('colors'); // Has useful side effects: Adds color options to strings.
 const async = require('async');
 const tsm = require('teamcity-service-messages');
-const Message = require('teamcity-service-messages/lib/message');
 const parseArgs = require('minimist');
-
-tsm.stdout = true;
-
-[
-  'inspectionType',
-  'inspection',
-]
-  .forEach((message) => {
-    tsm[message] = (args) => {
-      const output = new Message(message, args).toString();
-      if (tsm.stdout) {
-        console.log(output);
-        return tsm;
-      }
-
-      return output;
-    };
-  });
 
 const userArgs = parseArgs(process.argv.slice(2));
 if (userArgs._.length > 2) {
