@@ -2,7 +2,7 @@
 /* eslint-disable no-console */
 const {
   gitLogNumStat, getCurrentBranch,
-} = require('./index');
+} = require('./lib');
 require('colors'); // Has useful side effects: Adds color options to strings.
 const async = require('async');
 const tsm = require('teamcity-service-messages');
