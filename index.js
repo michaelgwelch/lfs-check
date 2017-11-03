@@ -42,8 +42,8 @@ async function gitLogNumStat(branch) {
   //  --diff-filter=d Don't show deleted files in the output. The --no-renames causes a rename to
   //      be shown as two files. But it's not clear which was added and which was removed. So I
   //      use this diff-filter to remove the deleted file leaving just the added file.
-  //  --format=oneline --abbrev-commit:For the commit only print out the abbreviated hash and subject
-  //      line( the files that changed are still printed as specified earlier)
+  //  --format=oneline --abbrev-commit:For the commit only print out the abbreviated hash and
+  //      subject line( the files that changed are still printed as specified earlier)
 
   const { stdout } = await exec(`git log --numstat --no-renames --diff-filter=d --format=oneline --abbrev-commit master..${branch}`);
 
