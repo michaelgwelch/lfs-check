@@ -66,6 +66,7 @@ async function teamcityChecker(commit) {
       tsm.inspection({
         typeId: 'FILE001', message: `Binary file '${binary}' detected in commit '${commit.id}'`, file: binary, SEVERITY: 'ERROR',
       });
+      tsm.setParameter({ name: 'binary-file-errors', value: true });
     });
   }
 }
