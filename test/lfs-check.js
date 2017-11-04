@@ -23,3 +23,12 @@ describe('lfs-check', function () {
     });
   });
 });
+
+describe('gitLogNumStat', function () {
+  it('expects a blank line between each commit returned by git', function () {
+    // Call gitLogNumStat with two well known tags in this repo that can
+    // be used for integration testing.
+
+    
+  })
+}

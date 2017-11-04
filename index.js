@@ -28,8 +28,8 @@ tsm.stdout = true;
   });
 
 const userArgs = parseArgs(process.argv.slice(2));
-if (userArgs._.length > 1) {
-  console.log('Usage: lfs-check [commit | branch]');
+if (userArgs._.length > 2) {
+  console.log('Usage: lfs-check [commitish] [base-commit]');
   process.exit(-1);
 }
 
@@ -71,11 +71,11 @@ async function teamcityChecker(commit) {
   }
 }
 
-const userArgPromise = (userArgs._.length === 0)
-  ? Promise.resolve('HEAD')
-  : Promise.resolve(userArgs._[0]);
+const compareCommit = userArgs._[0] || 'HEAD';
+const baseCommit = userArgs._[1];
 
-userArgPromise
-  .then(gitLogNumStat)
+const logResults = gitLogNumStat(compareCommit, baseCommit);
+
+logResults
   // using eachLimit to easily keep the commit results in order
   .then(commits => async.eachLimit(commits, 1, userArgs.reporter === 'teamcity' ? teamcityChecker : consoleChecker));
