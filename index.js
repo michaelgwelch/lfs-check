@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 /* eslint-disable no-console */
 const {
-  gitLogNumStat, getCurrentBranch,
+  gitLogNumStat,
 } = require('./lib');
 require('colors'); // Has useful side effects: Adds color options to strings.
 const async = require('async');
@@ -72,7 +72,7 @@ async function teamcityChecker(commit) {
 }
 
 const userArgPromise = (userArgs._.length === 0)
-  ? getCurrentBranch()
+  ? Promise.resolve('HEAD')
   : Promise.resolve(userArgs._[0]);
 
 userArgPromise
