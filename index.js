@@ -8,9 +8,9 @@ const async = require('async');
 const tsm = require('teamcity-service-messages');
 const parseArgs = require('minimist');
 
-const userArgs = parseArgs(process.argv.slice(2));
+const userArgs = parseArgs(process.argv.slice(2), { default: { 'build-problem': true } });
 if (userArgs._.length > 2) {
-  console.log('Usage: lfs-check [commitish] [base-commit]');
+  console.log('Usage: lfs-check [--no-build-problem] [commit | branch]');
   process.exit(-1);
 }
 
@@ -48,6 +48,9 @@ async function teamcityChecker(commit) {
         typeId: 'FILE001', message: `Binary file '${binary}' detected in commit '${commit.id}'`, file: binary, SEVERITY: 'ERROR',
       });
       tsm.setParameter({ name: 'binary-file-errors', value: true });
+      if (userArgs['build-problem']) {
+        tsm.buildProblem({ description: 'Binary files were detected' });
+      }
     });
   }
 }

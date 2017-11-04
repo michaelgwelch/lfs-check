@@ -1,5 +1,7 @@
 /* eslint-disable func-names, prefer-arrow-callback */
 const { gitLogNumStat } = require('../lib/git-log');
+const { promisify } = require('util');
+const exec = promisify(require('child_process').exec);
 const _ = require('lodash');
 const assert = require('assert');
 
@@ -32,5 +34,30 @@ describe('gitLogNumStat', function () {
     ];
 
     assert(_.isEqual(commits, expected));
+  });
+});
+
+describe('lfs-check', function () {
+  describe('when using teamcity reporter', function () {
+    it('includes buildProblem message by default', async function () {
+      const { stdout } = await exec('node . compareForTests baseForTests --reporter=teamcity');
+      const buildProblemPattern = /##teamcity\[buildProblem description='Binary files were detected'/;
+
+      assert(buildProblemPattern.test(stdout), 'Expected build problem in output');
+    });
+
+    it('does not include build problem if --no-build-problem switch used', async function () {
+      const { stdout } = await exec('node . compareForTests baseForTests --no-build-problem --reporter=teamcity');
+      const buildProblemPattern = /##teamcity\[buildProblem description='Binary files were detected'/;
+
+      assert(!buildProblemPattern.test(stdout), 'Expected no build problem in output');
+    });
+
+    it('includes one inspectionType if at least one binary found', async function () {
+      const { stdout } = await exec('node . compareForTests baseForTests --no-build-problem --reporter=teamcity');
+      const buildProblemPattern = /##teamcity\[inspectionType id='FILE001'/;
+
+      assert(buildProblemPattern.test(stdout), 'Expected FILE001 inspectionType');
+    });
   });
 });
