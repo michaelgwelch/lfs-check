@@ -15,6 +15,34 @@ it's too late to do anything about it.)
 npm install -g lfs-check
 ```
 
+## TeamCity Usage
+
+Invoke the command with teamcity reporter
+
+```sh
+lfs-check --reporter=teamcity
+```
+
+If you wish for the program to identify inspection errors but not actually fail the build, you can
+pass the `--no-build-problem` switch:
+
+```sh
+lfs-check --no-build-problem --reporter=teamcity
+```
+
+### Node Projects
+
+You may wish to add two tasks to your package.json scripts section:
+
+```json
+"scripts": {
+  "lfs-check": "node node_modules/lfs-check",
+  "lfs-check:teamcity": "node node_modules/lfs-check --reporter=teamcity"
+}
+```
+
+And then from your team city build you can add a build step to run `lfs-check:teamcity` and from the command line you can invoke the check by typing `npm run lfs-check`.
+
 ## Command line usage
 
 ```sh
