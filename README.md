@@ -1,12 +1,13 @@
 # lfs-check
 
-[![Build Status](https://travis-ci.org/michaelgwelch/lfs-check.svg?branch=master)](https://travis-ci.org/michaelgwelch/lfs-check) [![Build status](https://ci.appveyor.com/api/projects/status/6jflu15a7867prso?svg=true)](https://ci.appveyor.com/project/michaelgwelch/lfs-check)
+[![Build Status](https://travis-ci.org/michaelgwelch/lfs-check.svg?branch=master)](https://travis-ci.org/michaelgwelch/lfs-check) 
 
 Make sure your binary files are not accidentally added to your repository.
 
-Run this command line utility to identify any binary files that were added to your current branch. It will examine every new
-commit in the current branch until it reaches `master`. (It assumes everything in master is clean or else it's too late to do anything
-about it.)
+Run this command line utility to identify any binary files that were added to
+your current branch. It will examine every new commit in the current branch
+until it reaches `master`. (It assumes everything in master is clean or else
+it's too late to do anything about it.)
 
 ## Install
 
