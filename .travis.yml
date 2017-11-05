@@ -2,7 +2,5 @@ language: node_js
 install:
   - npm install
   - git fetch --tags
-  - git fetch origin baseForTests
-  - git fetch origin compareForTests
 node_js:
   - "8.8"
