@@ -40,6 +40,6 @@
     "async": "^2.5.0",
     "colors": "^1.1.2",
     "minimist": "^1.2.0",
-    "teamcity-service-messages": "^0.1.8"
+    "teamcity-service-messages": "git+https://github.com/michaelgwelch/teamcity-service-messages.git#v0.1.9-welch"
   }
 }

@@ -6,30 +6,11 @@ const {
 require('colors'); // Has useful side effects: Adds color options to strings.
 const async = require('async');
 const tsm = require('teamcity-service-messages');
-const Message = require('teamcity-service-messages/lib/message');
 const parseArgs = require('minimist');
 
-tsm.stdout = true;
-
-[
-  'inspectionType',
-  'inspection',
-]
-  .forEach((message) => {
-    tsm[message] = (args) => {
-      const output = new Message(message, args).toString();
-      if (tsm.stdout) {
-        console.log(output);
-        return tsm;
-      }
-
-      return output;
-    };
-  });
-
-const userArgs = parseArgs(process.argv.slice(2));
+const userArgs = parseArgs(process.argv.slice(2), { default: { 'build-problem': true } });
 if (userArgs._.length > 2) {
-  console.log('Usage: lfs-check [commitish] [base-commit]');
+  console.log('Usage: lfs-check [--no-build-problem] [commit | branch]');
   process.exit(-1);
 }
 
@@ -67,6 +48,9 @@ async function teamcityChecker(commit) {
         typeId: 'FILE001', message: `Binary file '${binary}' detected in commit '${commit.id}'`, file: binary, SEVERITY: 'ERROR',
       });
       tsm.setParameter({ name: 'binary-file-errors', value: true });
+      if (userArgs['build-problem']) {
+        tsm.buildProblem({ description: 'Binary files were detected' });
+      }
     });
   }
 }
