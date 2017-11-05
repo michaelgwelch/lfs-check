@@ -1,6 +1,6 @@
 {
   "name": "lfs-check",
-  "version": "0.5.2-alpha",
+  "version": "0.6.0-alpha.1",
   "description": "Make sure your binary files are tracked with git-lfs not checked into your repo.",
   "main": "./index.js",
   "preferGlobal": true,
