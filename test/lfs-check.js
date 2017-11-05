@@ -1,5 +1,5 @@
 /* eslint-disable func-names, prefer-arrow-callback */
-const { gitLogNumStat } = require('../lib');
+const { gitLogNumStat } = require('../lib/git-log');
 const _ = require('lodash');
 const assert = require('assert');
 
