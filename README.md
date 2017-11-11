@@ -1,13 +1,16 @@
 # lfs-check
 
-[![Build Status](https://travis-ci.org/michaelgwelch/lfs-check.svg?branch=master)](https://travis-ci.org/michaelgwelch/lfs-check) 
+<!-- cSpell:ignore repo, markdownlint, cword, esac, numstat, gitcomp -->
+[![Build Status](https://travis-ci.org/michaelgwelch/lfs-check.svg?branch=master)](https://travis-ci.org/michaelgwelch/lfs-check)
 
-Make sure your binary files are not accidentally added to your repository.
+Make sure your binary files are not accidentally added to your git repository.
 
 Run this command line utility to identify any binary files that were added to
 your current branch. It will examine every new commit in the current branch
-until it reaches `master`. (It assumes everything in master is clean or else
+since `master`. (It assumes everything in master is clean or else
 it's too late to do anything about it.)
+
+Note: If the current branch is not ahead of master this check will not do anything.
 
 ## Install
 
@@ -30,6 +33,20 @@ pass the `--no-build-problem` switch:
 lfs-check --no-build-problem --reporter=teamcity
 ```
 
+### Additional TeamCity Requirements
+
+If TeamCity doesn't fetch the master branch this command will fail. I've added an explicit TeamCity Command Line build step to ensure that master has been fetched.
+
+```sh
+git fetch origin master
+```
+
+Then I invoke `lfs-check` with explicit commits:
+
+```sh
+lfs-check HEAD origin/master --reporter=teamcity
+```
+
 ### Node Projects
 
 You may wish to add two tasks to your package.json scripts section:
@@ -37,11 +54,13 @@ You may wish to add two tasks to your package.json scripts section:
 ```json
 "scripts": {
   "lfs-check": "node node_modules/lfs-check",
-  "lfs-check:teamcity": "node node_modules/lfs-check --reporter=teamcity"
+  "lfs-check:teamcity": "node node_modules/lfs-check HEAD origin/master --reporter=teamcity"
 }
 ```
 
 And then from your team city build you can add a build step to run `lfs-check:teamcity` and from the command line you can invoke the check by typing `npm run lfs-check`.
+
+Note the usage of explicit commits in the teamcity build step. See [Additional TeamCity Requirements](#additional-teamcity-requirements) above.
 
 ## Command line usage
 
@@ -58,9 +77,9 @@ on any binaries that were found.
 This is because there is no diff produced when comparing master against master. If you run this command
 from master be sure to specify which branch you are examining.
 
-To help drive understanding of this behavior, the motivation for this program was to look for binary
+To understand this behavior, it helps to know that the motivation for this program was to look for binary
 files in a pull request. In that scenario there is no need to examine master. Even if it contains
-binaries, in most cases it's too late to do anything about it unless your repo is new and you don't
+binaries, in most cases it's too late to do anything about it unless your repository is new and you don't
 mind rewriting history.
 
 In the following example, the branch
@@ -131,7 +150,7 @@ Now you can type \<TAB\> after `lfs-` to auto-complete. This also works to auto-
 other git commands.
 
 **Note:** I have no idea how to write bash completions. The one above is based on `__git_branch ()` completions. I
-copied that function and removed a section I know I didnt need dealing with branch switches.
+copied that function and removed a section I know I didn't need dealing with branch switches.
 It seems to work for my needs (completing branch names).
 
 <!-- markdownlint-enable no-hard-tabs -->
