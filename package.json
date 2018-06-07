@@ -1,6 +1,6 @@
 {
   "name": "lfs-check",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Make sure your binary files are tracked with git-lfs not checked into your repository.",
   "main": "./index.js",
   "preferGlobal": true,
@@ -40,6 +40,6 @@
     "async": "^2.5.0",
     "colors": "^1.1.2",
     "minimist": "^1.2.0",
-    "teamcity-service-messages": "git+https://github.com/michaelgwelch/teamcity-service-messages.git#v0.1.9-welch"
+    "teamcity-service-messages": "^0.1.9"
   }
 }
